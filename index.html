@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kanban - Suporte Técnico</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="navbar-left">Kanban Suporte</div>
+    <div class="navbar-right">
+      <button id="theme-toggle">🌙</button>
+      <button id="auth-btn">Logout</button>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav>
+        <ul>
+          <li class="dropdown">
+            <button class="dropdown-btn">Detalhamento</button>
+            <ul class="dropdown-content">
+              <li id="submenu-ticket">Ticket <span id="ticket-preview"></span></li>
+              <div id="painel-suporte" class="painel-detalhamento"></div>
+              <li>Subitem 2</li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <button class="dropdown-btn">Menu 2</button>
+            <ul class="dropdown-content">
+              <li>Subitem 1</li>
+              <li>Subitem 2</li>
+            </ul>
+          </li>
+          <!-- Adicione mais 3 menus aqui depois -->
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Kanban -->
+<main class="kanban-board">
+  <div class="kanban-column" data-status="pendente">
+    <h2>Pendente</h2>
+        <div class="column-content" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="ticket prioridade-baixa" id="ticket-1" draggable="true" ondragstart="drag(event)">
+            <div class="ticket-title">Login não funciona</div>
+            <div class="ticket-client">#001 - João da Silva</div>
+            <div class="ticket-datetime">30/05/2025 - 14:32</div>
+        </div>
+
+        <div class="ticket prioridade-media" id="ticket-2" draggable="true" ondragstart="drag(event)">
+            <div class="ticket-title">Erro na página inicial</div>
+            <div class="ticket-client">#002 - Maria Souza</div>
+            <div class="ticket-datetime">30/05/2025 - 15:05</div>
+        </div>
+
+        <div class="ticket prioridade-alta" id="ticket-3" draggable="true" ondragstart="drag(event)">
+            <div class="ticket-title">Problema com pagamento</div>
+            <div class="ticket-client">#003 - Carlos Alberto</div>
+            <div class="ticket-datetime">30/05/2025 - 15:25</div>
+        </div>
+    </div>
+  </div>
+
+  <div class="kanban-column" data-status="em-andamento">
+    <h2>Em Atendimento</h2>
+    <div class="column-content" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <!-- Tickets podem ser soltos aqui -->
+    </div>
+  </div>
+
+  <div class="kanban-column" data-status="resolvido">
+    <h2>Resolvido</h2>
+    <div class="column-content" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <!-- Tickets resolvidos aqui -->
+    </div>
+  </div>
+
+  <div class="kanban-column" data-status="observacao">
+    <h2>Observação</h2>
+    <div class="column-content" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <!-- Tickets em observação -->
+    </div>
+  </div>
+</main>
+
+<!-- painel lateral flutuante -->
+<div id="ticket-details-panel" class="ticket-details invisible">
+  <button class="close-panel" onclick="closeTicketDetails()">×</button>
+  <h3>Detalhes do Ticket</h3>
+  <div id="ticket-info-content">
+    <!-- Conteúdo dinâmico será injetado aqui -->
+  </div>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
