@@ -1,6 +1,8 @@
 // Variaveis Globais para uso distintintos ou para testes
 let ultimoTicketSelecionado = null;
 let logado = true; // Estado fictício de login e simulação inicial de usuário logado
+let usuarioAtual = "suporte-1"; // ou suporte-2, no futuro
+
 
 // Referências aos elementos
 const sidebar = document.querySelector('.sidebar');
@@ -46,24 +48,88 @@ authBtn.addEventListener('click', () => {
 function showTicketDetails(ticket) {
   const sidebar = document.querySelector('.sidebar');
   const painel = document.getElementById('painel-suporte');
-
-  // Expande o sidebar
   sidebar.classList.add('sidebar-expanded');
 
-  // Preenche o painel com os dados
+  const titulo = ticket.querySelector(".ticket-title").textContent;
+  const cliente = ticket.querySelector(".ticket-client").textContent;
+  const data = ticket.querySelector(".ticket-datetime").textContent;
+
+  const coluna = ticket.parentElement.parentElement.getAttribute("data-status");
+
+  let usuarioResponsavel = "";
+  if (coluna === "em-andamento") {
+    usuarioResponsavel = `${usuarioAtual} (atendendo)`;
+  } else if (coluna === "observacao") {
+    const observador = ticket.getAttribute("data-observador") || "desconhecido";
+    usuarioResponsavel = `${observador} (marcou como observação)`;
+  }
+
+  // Salvar referência
+  ultimoTicketSelecionado = ticket;
+
+  // Logs por prioridade
+  const logsPorPrioridade = {
+    "prioridade-baixa": [
+      "Verificar acesso básico",
+      "Reiniciar serviço",
+      "Encaminhar ao nível 1"
+    ],
+    "prioridade-media": [
+      "Validar dados com cliente",
+      "Reproduzir erro em ambiente de teste",
+      "Aguardar posicionamento externo"
+    ],
+    "prioridade-alta": [
+      "Ação emergencial imediata",
+      "Encaminhar para dev sênior",
+      "Registrar incidente crítico"
+    ]
+  };
+
+  const prioridadeClasse = Array.from(ticket.classList).find(c => c.startsWith("prioridade"));
+  const logs = logsPorPrioridade[prioridadeClasse] || [];
+
+  // Montar HTML do painel
   painel.innerHTML = `
     <button class="close-panel" onclick="closeTicketDetails()">×</button>
-    <h3>Ticket Selecionado</h3>
-    <p><strong>Erro:</strong> ${ticket.querySelector(".ticket-title").textContent}</p>
-    <p><strong>Cliente:</strong> ${ticket.querySelector(".ticket-client").textContent}</p>
-    <p><strong>Data/Hora:</strong> ${ticket.querySelector(".ticket-datetime").textContent}</p>
+    <h2>Providências</h2>
+    <hr />
+    <p><strong>Erro:</strong> ${titulo}</p>
+    <p><strong>Cliente:</strong> ${cliente}</p>
+    <p><strong>Data/Hora:</strong> ${data}</p>
+    <hr />
+    <p><strong>Responsável:</strong> ${usuarioResponsavel}</p>
+
+    <h3 style="margin-top: 20px;">Registrar Providência</h3>
+    <label for="logSelecionado">Tipo de providência:</label>
+    <select id="logSelecionado" style="width: 100%;">
+      ${logs.map(log => `<option value="${log}">${log}</option>`).join("")}
+    </select>
+
+    <label for="campoProvidencia" style="margin-top: 10px; display: block;">
+      Comentário (<span id="contador">450</span> caracteres restantes):
+    </label>
+    <textarea id="campoProvidencia" maxlength="450" style="width: 100%; border-radius: 8px; padding: 8px; resize: vertical;"></textarea>
+
+    <div style="margin-top: 15px;">
+      <button onclick="confirmarAcao('finalizar')">Finalizar</button>
+      <button onclick="confirmarAcao('observar')">Observar</button>
+      <button onclick="confirmarAcao('salvar')">Salvar</button>
+    </div>
   `;
 
-  // Mostra o painel com efeito
+  // Ativa o painel
   painel.classList.add('visible');
 
-  // Ultimo tickett aberto no suporte
-  ultimoTicketSelecionado = ticket;
+  // Iniciar contador de caracteres
+  setTimeout(() => {
+    const textarea = document.getElementById("campoProvidencia");
+    const contador = document.getElementById("contador");
+
+    textarea.addEventListener("input", () => {
+      contador.textContent = 450 - textarea.value.length;
+    });
+  }, 100);
 }
 
 
@@ -112,6 +178,12 @@ window.drop = function(ev) {
 
   if (origem === destino || (permitido[origem] && permitido[origem].includes(destino))) {
     targetColumn.appendChild(ticket);
+
+    //Observa o usuario atual que moveu o ticket para Observaçao
+    if (destino === "observacao") {
+      ticket.setAttribute("data-observador", usuarioAtual);
+    }
+
     // Se o ticket foi movido para Em Atendimento ou Observação
     if (destino === "em-andamento" || destino === "observacao") {
       //ticket.addEventListener('click', () => showTicketDetails(ticket));

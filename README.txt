@@ -20,17 +20,39 @@ Dentro de /src:
     data/: 
         tickets.json: Dados mockados dos tickets (para testes iniciais sem backend).
 
--> Etapas sugeridas
-1 - Estruturar o HTML base com navbar + sidebar + layout de colunas.
+🧭 Sugestão de próximos passos (em ordem lógica):
+1 - Salvar estado dos tickets no localStorage
 
-2 - Criar o CSS básico com responsividade e aparência clara.
+    Tickets continuam existindo após reload
 
-3 - Implementar dark/light mode com toggle.
+    Inclui status, posição e último visualizado
 
-4 - Criar funcionalidade de login/logout fake (apenas para UI).
+2 - Adicionar botão “Novo Ticket”
 
-5 - Adicionar dropdown funcional nos menus laterais.
+    Gera novo card na coluna “Pendente”
 
-6 - Programar os tickets e a lógica de arrastar (drag and drop ou botões simples).
+    Formulário simples com título, cliente, prioridade
 
-7 - Refatorar e modularizar.
+3 - Editar tickets diretamente no painel
+
+    Campo de edição (título, cliente, data)
+
+    Botão “Salvar alterações”
+
+4 - Filtrar e ordenar tickets por prioridade
+
+    Ex: mostrar primeiro os tickets de prioridade alta
+
+5 - Criação de usuários fictícios e autenticação básica
+
+    Diferenciar suporte, admin e cliente (mais pra frente)
+
+6 - Integração com Firebase (back-end leve)
+
+    Substituir localStorage por banco real
+
+    Tempo real com Firestore
+
+7 - Inserçao de (meta de time) 
+
+    Dentro do ticket seguindo regra de prioridade (Ex: Codigo Azul (ate 15 min.))
