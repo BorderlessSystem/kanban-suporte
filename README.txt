@@ -20,7 +20,7 @@ Dentro de /src:
     data/: 
         tickets.json: Dados mockados dos tickets (para testes iniciais sem backend).
 
-🧭 Sugestão de próximos passos (em ordem lógica):
+Próximos passos (em ordem lógica):
 1 - Salvar estado dos tickets no localStorage
 
     Tickets continuam existindo após reload
